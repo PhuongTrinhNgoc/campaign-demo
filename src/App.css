@@ -88,6 +88,7 @@
   gap: 20px;
   justify-content: center;
   align-items: center;
+  margin: 30px 0;
 }
 .active{
   border: 2px solid rgb(0, 114, 187);
@@ -123,6 +124,30 @@
   fill: green !important;
 
 }
-.advertising_list{
-  margin-top: 20px;
+
+.advertising_list {
+  margin-top: 20px !important;
+  max-height: 430px !important;
+  overflow-y: auto !important;
+}
+.advertising_list::-webkit-scrollbar-thumb {
+  width: 2px; /* Điều chỉnh chiều rộng tại đây */
+  background-color: rgb(0, 114, 187); /* Màu nền của thanh cuộn con */
+  height: 4px;
+}
+.advertising_list::-webkit-scrollbar {
+  width: 10px; /* Điều chỉnh chiều rộng tổng của thanh scroll bar */
+  background-color: #f1f1f1; /* Màu nền của thanh scroll bar */
+  height: 10px;
+
+}
+.tab_head{
+  position: sticky;
+  top: 0;
+  background-color: #fff;
+  z-index: 2;
+
+}
+.tab_bot{
+  z-index: 1;
 }

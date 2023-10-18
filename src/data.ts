@@ -26,7 +26,7 @@ const initialCampaign: Campaign = {
     {
       name: 'Chiến dịch con 1',
       status: true,
-      ads: [{ name: 'Quảng cáo 1', quantity: 1 }],
+      ads: [{ name: 'Quảng cáo 1', quantity: 0 }],
     },
   ],
 };

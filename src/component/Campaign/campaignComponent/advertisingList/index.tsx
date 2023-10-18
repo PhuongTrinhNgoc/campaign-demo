@@ -14,10 +14,12 @@ const AdvertisingList = ({
   data,
   setCampaign,
   campaign,
-  onNameChange,
-  onQuantityChange,
+  setNumQc,
+  numQc,
+  indexCamp,
+  setCurrentCampaignIndex,
+  currentCampaignIndex
 }: any) => {
-  const numQc = 1;
 
   const [selected, setSelected] = useState<number[]>([]);
 
@@ -25,7 +27,7 @@ const AdvertisingList = ({
     if (event.target.checked) {
       const allAdIndices: number[] = data.map((_:any, index:any) => index);
       setSelected(allAdIndices);
-    } else {
+    } else { 
       setSelected([]);
     }
   };
@@ -53,48 +55,168 @@ const AdvertisingList = ({
 
   const isSelected = (index: number) => selected.includes(index);
 
+  // const handleAddAdvertising = () => {
+  //   // Thêm quảng cáo mới vào danh sách quảng cáo của chiến dịch hiện tại
+  //   const newAdvertising = { name: `quảng cáo ${numQc}`, quantity: 0 };
+  //   const updatedData = [...data, newAdvertising];
+  //   setNumQc(numQc + 1); // Tăng numQc lên 1 để chuẩn bị cho quảng cáo tiếp theo
+
+  //   // Cập nhật chiến dịch hiện tại với danh sách quảng cáo mới
+  //   setCampaign((prevCampaign: any) => ({
+  //     ...prevCampaign,
+  //     subCampaigns: prevCampaign.subCampaigns.map((item: any, index: number) => {
+  //       if (index === indexCamp) {
+  //         return {
+  //           ...item,
+  //           ads: updatedData,
+  //         };
+  //       } else {
+  //         return item;
+  //       }
+  //     }),
+  //   }));
+  // };
+
+
   const handleAddAdvertising = () => {
-    // Thêm quảng cáo mới vào danh sách
-    const newAdvertising = { name: `quảng cáo ${numQc + 1}`, quantity: 0 };
+    const newAdvertising = { name: `quảng cáo ${numQc}`, quantity: 0 };
+    setNumQc(numQc + 1); // Tăng số quảng cáo lên 1
     const updatedData = [...data, newAdvertising];
-    console.log(data);
+
+    setCampaign((prevCampaign:any) => ({
+      ...prevCampaign,
+      subCampaigns: prevCampaign.subCampaigns.map((item: any, index: number) => {
+        if (index === indexCamp) {
+          return {
+            ...item,
+            ads: updatedData,
+          };
+        } else {
+          return item;
+        }
+      }),
+    }));
+  }
+  // const handleAddAdvertising = () => {
+  //   const newAdvertising = {
+  //     name: `quảng cáo ${numQc}`,
+  //     quantity: 0,
+  //   };
+    
+  //   // Tăng số thứ tự quảng cáo của chiến dịch hiện tại lên 1
+  //   const updatedCampaign = { ...campaign };
+  //   updatedCampaign.subCampaigns[currentCampaignIndex].ads.push(newAdvertising);
+    
+  //   setNumQc(numQc + 1); // Tăng số quảng cáo lên 1
+  //   setCampaign(updatedCampaign);
+  // };
+
+
+  const handleNameChange = (e: React.ChangeEvent<HTMLInputElement>, index: number) => {
+    const updatedData = [...data];
+    updatedData[index] = { ...updatedData[index], name: e.target.value }; // Sao chép quảng cáo và chỉ thay đổi tên của quảng cáo cụ thể
+  
     setCampaign((prevCampaign: any) => ({
       ...prevCampaign,
-      subCampaigns: prevCampaign.subCampaigns.map( (item:any)=>  ({...item,ads:updatedData} )),
+      subCampaigns: prevCampaign.subCampaigns.map((item: any, indexSub: number) => {
+        if (indexSub === indexCamp) {
+          return {
+            ...item,
+            ads: updatedData,
+          };
+        } else {
+          return item;
+        }
+      }),
     }));
-    console.log(fullData);
-    
   };
-
+  
+  const handleQuantityChange = (event: React.ChangeEvent<HTMLInputElement>, index: number) => {
+    const updatedData = [...data];
+    updatedData[index].quantity = Number(event.target.value);
+    setCampaign((prevCampaign: any) => ({
+      ...prevCampaign,
+      subCampaigns: prevCampaign.subCampaigns.map((item: any,indexSub:any) =>{
+        if (indexSub === indexCamp) {
+          return {
+            ...item,
+            ads: updatedData,
+          };
+        } else {
+          return item;
+        }
+      }
+      ),
+    }));
+  };
+  const handleRemoveAdvertising = (index: number) => {
+    const updatedData = [...data];
+    updatedData.splice(index, 1); // Xóa quảng cáo tại index
+  
+    // Cập nhật index của quảng cáo trong danh sách sau khi xóa
+    // updatedData.forEach((ad, adIndex) => {
+    //   ad.name = `quảng cáo ${numQc + adIndex}`;
+    // });
+  
+    setCampaign((prevCampaign: any) => ({
+      ...prevCampaign,
+      subCampaigns: prevCampaign.subCampaigns.map((item: any, index: number) => {
+        if (index === indexCamp) {
+          return {
+            ...item,
+            ads: updatedData,
+          };
+        } else {
+          return item;
+        }
+      }),
+    }));
+  
+    // Cập nhật lại numQc nếu index của quảng cáo bị xóa lớn hơn hoặc bằng numQc
+    if (index + 1 >= numQc) {
+      setNumQc(index + 2); // +2 để đảm bảo số tiếp theo là numQc + 1
+    }
+  };
+  
   return (
     <Table aria-label="ad table">
-      <TableHead>
-        <TableRow>
-          <TableCell style={{ width: 60 }}>
-            <Checkbox
-              indeterminate={selected.length > 0 && selected.length < data.length}
-              checked={selected.length === data.length}
-              onChange={handleSelectAllClick}
-            />
+      <TableBody className="tab_head">
+          <TableCell style={ {padding:'0 4px', width: 60 }}>
+         
+              <FormControlLabel
+                    control={
+                      <Checkbox
+                      indeterminate={selected.length > 0 && selected.length < data.length}
+                      checked={selected.length > 0 && selected.length === data.length}
+                      onChange={handleSelectAllClick}
+                    />
+                    }
+                    label=""
+                  />
           </TableCell>
+
           <TableCell>
             <p style={{ fontWeight: "bold" }}>Tên quảng cáo*</p>
           </TableCell>
           <TableCell style={{ width: "38%" }}>
             <p style={{ fontWeight: "bold" }}>Số lượng*</p>
           </TableCell>
-          <TableCell style={{ padding: "0 16px", width: 120 }}>
-            <Button
+          <TableCell align="right">
+          <Button
               onClick={handleAddAdvertising}
               variant="outlined"
               color="primary"
             >
               Thêm
             </Button>
-          </TableCell>
-        </TableRow>
-      </TableHead>
-      <TableBody>
+                </TableCell>
+ 
+
+      </TableBody>
+      <TableBody className="tab_bot">
+        {/* <div className="body_list_campaign"> */}
+
+    
         {data &&
           data.map((row: any, index: number) => {
             const isItemSelected = isSelected(index);
@@ -114,7 +236,7 @@ const AdvertisingList = ({
                         color="primary"
                       />
                     }
-                    label="Label"
+                    label=""
                   />
                 </TableCell>
                 <TableCell>
@@ -124,7 +246,7 @@ const AdvertisingList = ({
                       value={row.name}
                       id="standard-basic"
                       variant="standard"
-                      onChange={(e) => onNameChange(e, index)}
+                      onChange={(e:any) => handleNameChange(e, index)}
                     />
                   </div>
                 </TableCell>
@@ -135,18 +257,19 @@ const AdvertisingList = ({
                       value={row.quantity}
                       id="standard-basic"
                       variant="standard"
-                      onChange={(e) => onQuantityChange(e, index)}
+                      onChange={(e:any) => handleQuantityChange(e, index)}
                     />
                   </div>
                 </TableCell>
                 <TableCell align="right">
-                  <Button variant="outlined" color="primary">
-                    Sửa
+                  <Button onClick={()=> handleRemoveAdvertising(index) } variant="outlined" color="error">
+                    Xóa
                   </Button>
                 </TableCell>
               </TableRow>
             );
           })}
+              {/* </div> */}
       </TableBody>
     </Table>
   );

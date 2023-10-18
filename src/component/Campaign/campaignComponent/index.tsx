@@ -18,12 +18,31 @@ const CampaignComponent = ({
   const [value, setValue] = useState("");
   const [indexCamp, setIndexCamp] = useState(0);
   const [campaignNum, setCampaignNum] = useState(2);
+  const [numQc, setNumQc] = useState(2); // Ban đầu, numQc có giá trị 1
+  const [currentCampaignIndex, setCurrentCampaignIndex] = useState(0);
+
+
+
   const [subCampaignStatus, setSubCampaignStatus] = useState(
     campaign.subCampaigns.map((a: any) => a.status)
   );
+  // const totalQuantities: { [index: number]: number } = {};
 
-  const numQc = 1;
-  console.log(campaign);
+  // // Tính totalQuantity cho từng chiến dịch con
+  // campaign.subCampaigns.forEach((subCampaign:any, index:number) => {
+  //   const quantityReducer = (accumulator:any, currentAd:any) => accumulator + currentAd.quantity;
+  //   console.log(subCampaign);
+    
+  //   // totalQuantities[index] = subCampaign.ads.reduce(quantityReducer, 0);
+  // });
+  
+  // // Bây giờ bạn có một đối tượng totalQuantities chứa totalQuantity cho từng chiến dịch con
+  // console.log(totalQuantities);
+  const quantityReducer = (accumulator:any, currentAd:any) => accumulator + currentAd.quantity;
+    const arrIndex = campaign.subCampaigns[indexCamp];
+    // const arrIndex.ads.reduce(quantityReducer, 0);
+  const numQc2 = 1;
+  console.log(arrIndex.ads);
   useEffect(() => {
     setValue(campaign.subCampaigns[campaign.subCampaigns.length - 1].name);
     setIndexCamp(campaign.subCampaigns.length - 1);
@@ -47,11 +66,12 @@ const CampaignComponent = ({
     }));
   };
   const handleAddCampaign = () => {
+    setNumQc(2)
     setCampaignNum(campaignNum + 1);
     const newObject = {
       name: `Chiến dịch con ${campaignNum}`,
       status: true,
-      ads: [{ quantity: 1, name: `Quảng cáo ${numQc}` }],
+      ads: [{ quantity: 0, name: `Quảng cáo ${numQc2}` }],
     };
     setCampaign((prevState: any) => ({
       ...prevState,
@@ -61,28 +81,11 @@ const CampaignComponent = ({
   const handleClickCampaign = (campai: any, index: number) => {
     setIndexCamp(index);
     setValue(campai.name);
+    setNumQc(2)
   };
 
-  const handleNameChange = (event: React.ChangeEvent<HTMLInputElement>, index: number) => {
-    const updatedSubCampaigns = [...campaign.subCampaigns];
-    updatedSubCampaigns[index].ads[0].name = event.target.value;
   
-    setCampaign((prevCampaign: any) => ({
-      ...prevCampaign,
-      subCampaigns: updatedSubCampaigns,
-    }));
-  };
-  
-  const handleQuantityChange = (event: React.ChangeEvent<HTMLInputElement>, index: number) => {
-    const updatedSubCampaigns = [...campaign.subCampaigns];
-    updatedSubCampaigns[index].ads[0].quantity = Number(event.target.value);
-  
-    setCampaign((prevCampaign: any) => ({
-      ...prevCampaign,
-      subCampaigns: updatedSubCampaigns,
-    }));
-  };
-  
+
   return (
     <div>
       <div className="campaign__main">
@@ -118,7 +121,9 @@ const CampaignComponent = ({
                       </div>
                       <div style={{ textAlign: "center" }}>
                         <Tooltip title="Số lượng">
-                          <div>0</div>
+                          <div>
+                            {/* {totalQuantities[0]} */}
+</div>
                         </Tooltip>
                       </div>
                     </div>
@@ -158,9 +163,17 @@ const CampaignComponent = ({
         />
       </div>
       <div className="advertising_list">
-      <AdvertisingList fullData={campaign.subCampaigns} campaign={campaign} setCampaign={setCampaign} data={campaign.subCampaigns[indexCamp].ads}   onNameChange={handleNameChange}
-  onQuantityChange={handleQuantityChange} />
-
+        <AdvertisingList
+          fullData={campaign.subCampaigns}
+          campaign={campaign}
+          setCampaign={setCampaign}
+          data={campaign.subCampaigns[indexCamp].ads}
+          indexCamp={indexCamp}
+          numQc={numQc}
+          setNumQc={setNumQc}
+          setCurrentCampaignIndex={setCurrentCampaignIndex}
+          currentCampaignIndex={currentCampaignIndex}
+        />
       </div>
     </div>
   );
