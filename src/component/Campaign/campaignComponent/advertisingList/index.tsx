@@ -79,7 +79,7 @@ const AdvertisingList = ({
 
 
   const handleAddAdvertising = () => {
-    const newAdvertising = { name: `quảng cáo ${numQc}`, quantity: 0 };
+    const newAdvertising = { name: `quảng cáo`, quantity: 0 };
     setNumQc(numQc + 1); // Tăng số quảng cáo lên 1
     const updatedData = [...data, newAdvertising];
 
@@ -243,7 +243,7 @@ const AdvertisingList = ({
                   <div>
                     <TextField
                       type="text"
-                      value={row.name}
+                      value={`${row.name} ${index + 1}`}
                       id="standard-basic"
                       variant="standard"
                       onChange={(e:any) => handleNameChange(e, index)}
