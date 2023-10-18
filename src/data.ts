@@ -1,0 +1,34 @@
+interface Campaign {
+  information: {
+    name: string;
+    describe?: string;
+  };
+  subCampaigns: SubCampaign[];
+}
+
+interface SubCampaign {
+  name: string;
+  status: boolean;
+  ads: Ad[];
+}
+
+interface Ad {
+  name: string;
+  quantity: number;
+}
+
+const initialCampaign: Campaign = {
+  information: {
+    name: '',
+    describe: '',
+  },
+  subCampaigns: [
+    {
+      name: 'Chiến dịch con 1',
+      status: true,
+      ads: [{ name: 'Quảng cáo 1', quantity: 1 }],
+    },
+  ],
+};
+
+export { initialCampaign };
