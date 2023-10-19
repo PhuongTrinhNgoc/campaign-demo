@@ -1,99 +1,114 @@
-.container{
+.container {
   font-family: "Roboto", "Helvetica", "Arial", sans-serif;
 }
-
-.campaign__main{
-  display: flex;
+.position-re {
+  position: relative;
+  z-index: 100;
 }
-.campain_list{
- display: flex;
- overflow-x: auto;
- padding: 10px ;
-
+.campaign__main {
+  display: flex;
+  align-items: center;
+}
+.campain_list {
+  display: flex;
+  overflow-x: auto;
+  padding: 10px;
 }
 .campain_list::-webkit-scrollbar-thumb {
-    width: 2px; /* Điều chỉnh chiều rộng tại đây */
-    background-color: rgb(0, 114, 187); /* Màu nền của thanh cuộn con */
-    height: 4px;
+  width: 2px; /* Điều chỉnh chiều rộng tại đây */
+  background-color: rgb(0, 114, 187); /* Màu nền của thanh cuộn con */
+  height: 4px;
 }
 .campain_list::-webkit-scrollbar {
-    width: 2px; /* Điều chỉnh chiều rộng tổng của thanh scroll bar */
-    background-color: #f1f1f1; /* Màu nền của thanh scroll bar */
-    height: 10px;
-
+  width: 2px; /* Điều chỉnh chiều rộng tổng của thanh scroll bar */
+  background-color: #f1f1f1; /* Màu nền của thanh scroll bar */
+  height: 10px;
 }
-.campaign{
-  
+
+.campaign {
+  z-index: 99;
   word-break: break-all;
-    display: flex;
-    justify-content: center;
-    padding: 10px;
-    /* min-width: 210px; */
-    width: 210px;
-    max-width: 210px;
-    height: 120px;
-    margin-left: 16px;
-    cursor: pointer;
-    border: 2px solid rgb(250, 250, 250);
-    box-shadow: 0px 2px 1px -1px rgba(0,0,0,0.2), 0px 1px 1px 0px rgba(0,0,0,0.14), 0px 1px 3px 0px rgba(0,0,0,0.12);
-    color: rgba(0, 0, 0, 0.87);
-    transition: box-shadow 300ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
-    background-color: #fff;
-    
+  display: flex;
+  padding: 10px;
+  border-radius: 10px;
+  justify-content: center;
+  /* min-width: 210px; */
+  width: 210px;
+  max-width: 210px;
+  height: 120px;
+  margin-left: 16px;
+  cursor: pointer;
+  border: 2px solid rgb(250, 250, 250);
+  box-shadow: 0px 2px 1px -1px rgba(0, 0, 0, 0.2),
+    0px 1px 1px 0px rgba(0, 0, 0, 0.14), 0px 1px 3px 0px rgba(0, 0, 0, 0.12);
+  color: rgba(0, 0, 0, 0.87);
+  transition: box-shadow 300ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
+  background-color: #fff;
 }
-.campain_left{
-    width: 7%;
+.campain_left {
+  width: 7%;
 }
-.campaign_content_head{
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 4px;
+.campaign_content_head {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 4px;
 }
-.campaign_content{
-
+.campaign_content {
 }
-.btn-add{
-    background-color: #ededed;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 50px;
-    height: 50px;
-    border-radius: 50%;
+.deleteCampaign {
+  display: none;
+  position: absolute;
+  bottom: 10px;
+  left: 30px;
 }
-.icon_content{
-
-   
-    display: inline-block;
+.position-re:hover .deleteCampaign {
+  display: block;
+}
+.btn-add {
+  background-color: #ededed;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+}
+.btn-add:hover {
+  background-color: #dfdfdf;
+  cursor: pointer;
+}
+.icon_content {
+  display: inline-block;
 }
 .icon_content svg {
-    width: 100%;
+  width: 100%;
 }
 .icon_content svg path {
-    color: #fff;
-    background-color: #fff;
+  color: #fff;
+  background-color: #fff;
 }
-.container{
+.container {
   padding: 30px;
-  height: calc(100vh - 102px) ;
+  height: calc(100vh - 102px);
 }
-.content{
+.content {
   padding: 20px;
   border-radius: 6px;
-  box-shadow: 0px 2px 1px -1px rgba(0,0,0,0.2), 0px 1px 1px 0px rgba(0,0,0,0.14), 0px 1px 3px 0px rgba(0,0,0,0.12);
+  box-shadow: 0px 2px 1px -1px rgba(0, 0, 0, 0.2),
+    0px 1px 1px 0px rgba(0, 0, 0, 0.14), 0px 1px 3px 0px rgba(0, 0, 0, 0.12);
 }
-.child_campaign{
+.child_campaign {
   display: flex;
   gap: 20px;
   justify-content: center;
   align-items: center;
   margin: 30px 0;
 }
-.active{
+.active {
   border: 2px solid rgb(0, 114, 187);
 }
-.campain_name{
+.campain_name {
   font-size: 1.25rem;
   font-family: "Roboto", "Helvetica", "Arial", sans-serif;
   font-weight: 500;
@@ -102,27 +117,25 @@
 }
 .campain_name svg {
   fill: currentColor;
-    width: 1em;
-    height: 1em;
-    display: inline-block;
-    font-size: 1.5rem;
-    transition: fill 200ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
-    flex-shrink: 0;
-    user-select: none;
-    font-size: 14px;
-    color: #fff;
+  width: 1em;
+  height: 1em;
+  display: inline-block;
+  font-size: 1.5rem;
+  transition: fill 200ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
+  flex-shrink: 0;
+  user-select: none;
+  font-size: 14px;
+  color: #fff;
 
-    padding-left: 8px;
-
+  padding-left: 8px;
 }
 .campain_name svg path {
   font-size: 14px;
   /* color: #fff; */
   fill: green;
 }
-.icon_done{
+.icon_done {
   fill: green !important;
-
 }
 
 .advertising_list {
@@ -139,15 +152,57 @@
   width: 10px; /* Điều chỉnh chiều rộng tổng của thanh scroll bar */
   background-color: #f1f1f1; /* Màu nền của thanh scroll bar */
   height: 10px;
-
 }
-.tab_head{
+.tab_head {
   position: sticky;
   top: 0;
   background-color: #fff;
   z-index: 2;
-
 }
-.tab_bot{
+.tab_bot {
   z-index: 1;
+}
+.total_quantyti {
+  font-size: 1.5rem;
+  font-family: "Roboto", "Helvetica", "Arial", sans-serif;
+  font-weight: 400;
+  line-height: 1.334;
+  letter-spacing: 0em;
+  margin-top: 20px;
+}
+
+.campaign_none {
+  height: 120px;
+  width: 100%;
+  text-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.icon_delete {
+  color: red;
+}
+.icon_delete:hover {
+  color: rgb(131, 0, 0);
+}
+.error{
+  color: red;
+}
+.error .css-v4u5dn-MuiInputBase-root-MuiInput-root:before{
+  border-bottom: 1px solid red !important;
+}
+.submit{
+  margin-top: 20px;
+  display: flex;
+  justify-content: end;
+}
+.main_file_left{
+  display: flex;
+  flex-direction: column;
+}
+.campaignName{
+  margin-bottom: 20px;
+}
+.main_file_left .css-v4u5dn-MuiInputBase-root-MuiInput-root{
+  margin-bottom: 20px !important;
 }

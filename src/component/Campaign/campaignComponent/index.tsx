@@ -7,48 +7,49 @@ import FormControlLabel from "@mui/material/FormControlLabel";
 import Checkbox from "@mui/material/Checkbox";
 import Tooltip from "@mui/material/Tooltip";
 import AdvertisingList from "./advertisingList";
+import DeleteIcon from '@mui/icons-material/Delete';
 
 const CampaignComponent = ({
   campaign,
   setCampaign,
+  submitted,
+  setSubmitted
 }: {
   campaign: any;
   setCampaign: any;
+  submitted:any
+  setSubmitted:any
 }) => {
   const [value, setValue] = useState("");
   const [indexCamp, setIndexCamp] = useState(0);
   const [campaignNum, setCampaignNum] = useState(2);
-  const [numQc, setNumQc] = useState(2); // Ban đầu, numQc có giá trị 1
-  const [currentCampaignIndex, setCurrentCampaignIndex] = useState(0);
-
-
-
+  const [totalQuantities, setTotalQuantities] = useState<number[]>([]);
   const [subCampaignStatus, setSubCampaignStatus] = useState(
     campaign.subCampaigns.map((a: any) => a.status)
   );
-  // const totalQuantities: { [index: number]: number } = {};
 
-  // // Tính totalQuantity cho từng chiến dịch con
-  // campaign.subCampaigns.forEach((subCampaign:any, index:number) => {
-  //   const quantityReducer = (accumulator:any, currentAd:any) => accumulator + currentAd.quantity;
-  //   console.log(subCampaign);
-    
-  //   // totalQuantities[index] = subCampaign.ads.reduce(quantityReducer, 0);
-  // });
-  
-  // // Bây giờ bạn có một đối tượng totalQuantities chứa totalQuantity cho từng chiến dịch con
-  // console.log(totalQuantities);
-  const quantityReducer = (accumulator:any, currentAd:any) => accumulator + currentAd.quantity;
-    const arrIndex = campaign.subCampaigns[indexCamp];
-    // const arrIndex.ads.reduce(quantityReducer, 0);
-  const numQc2 = 1;
-  console.log(arrIndex.ads);
+
+  const calculateTotalQuantity = (subCampaign: any) => {
+    return subCampaign.ads.reduce(
+      (total: any, ad: any) => total + ad.quantity,
+      0
+    );
+  };
+
   useEffect(() => {
-    setValue(campaign.subCampaigns[campaign.subCampaigns.length - 1].name);
+    const quantities = campaign.subCampaigns.map(calculateTotalQuantity);
+    setTotalQuantities(quantities);
+  }, [campaign.subCampaigns]);
+
+  useEffect(() => {
+    setValue(campaign.subCampaigns[campaign.subCampaigns.length - 1]?.name);
     setIndexCamp(campaign.subCampaigns.length - 1);
   }, [campaign.subCampaigns.length]);
 
+
+
   //handle
+
   const handleCheckboxChange = (e: any) => {
     const updatedSubCampaigns = [...campaign.subCampaigns];
     updatedSubCampaigns[indexCamp] = {
@@ -66,26 +67,36 @@ const CampaignComponent = ({
     }));
   };
   const handleAddCampaign = () => {
-    setNumQc(2)
     setCampaignNum(campaignNum + 1);
     const newObject = {
       name: `Chiến dịch con ${campaignNum}`,
       status: true,
-      ads: [{ quantity: 0, name: `Quảng cáo ${numQc2}` }],
+      ads: [{ quantity: 0, name: `Quảng cáo` }],
     };
     setCampaign((prevState: any) => ({
       ...prevState,
       subCampaigns: [...prevState.subCampaigns, newObject],
     }));
   };
+
   const handleClickCampaign = (campai: any, index: number) => {
     setIndexCamp(index);
     setValue(campai.name);
-    setNumQc(2)
+  };
+
+  const handleRemoveCampaign = (indexToRemove: number) => {
+    setCampaign((prevCampaign: any) => {
+      const updatedSubCampaigns = [...prevCampaign.subCampaigns];
+      updatedSubCampaigns.splice(indexToRemove, 1);
+      return {
+        ...prevCampaign,
+        subCampaigns: updatedSubCampaigns,
+      };
+    });
   };
 
   
-
+  
   return (
     <div>
       <div className="campaign__main">
@@ -95,18 +106,20 @@ const CampaignComponent = ({
           </div>
         </div>
         <div className="campain_list campain_right">
-          {campaign &&
-            campaign.subCampaigns.map((campai: any, index: number) => {
+          {
+        campaign.subCampaigns.length > 0 ?    campaign.subCampaigns.map((campai: any, index: number) => {
               return (
-                <div key={index}>
+                <div className="position-re" key={index}>
                   <div
                     onClick={() => handleClickCampaign(campai, index)}
                     className={`campaign ${value == campai.name && "active"}`}
                   >
+       
+
                     <div className="campaign_content">
                       <div className="campaign_content_head">
                         <span>
-                          <div className="campain_name">
+                          <div className= {` campain_name ${totalQuantities[index] == 0 && submitted ? "error" : ""}`}>
                             {" "}
                             {campai.name}
                             <span className="">
@@ -119,23 +132,37 @@ const CampaignComponent = ({
                           </div>
                         </span>
                       </div>
+                      <div className="deleteCampaign" onClick={()=> handleRemoveCampaign(index)}>
+                      <DeleteIcon className="icon_delete"/>
+                    </div>
                       <div style={{ textAlign: "center" }}>
                         <Tooltip title="Số lượng">
-                          <div>
-                            {/* {totalQuantities[0]} */}
-</div>
+                          <h5 className="total_quantyti">
+ 
+                            {totalQuantities[index]}
+                
+
+                          </h5>
                         </Tooltip>
                       </div>
+                      
                     </div>
                   </div>
                 </div>
               );
-            })}
+            }) : 
+            <div className="campaign_none">
+              Bạn chưa có chiến dịch nào
+
+            </div>
+            }
         </div>
       </div>
+      {campaign.subCampaigns.length > 0 && 
+      <>
       <div className="child_campaign">
         <TextField
-          value={campaign.subCampaigns[indexCamp].name}
+          value={campaign && campaign?.subCampaigns[indexCamp]?.name}
           sx={{ width: "80%" }}
           id="standard-basic"
           label="Tên chiến dịch con *"
@@ -158,24 +185,26 @@ const CampaignComponent = ({
           sx={{ width: "20%" }}
           control={<Checkbox defaultChecked />}
           label="Đang hoạt động"
-          checked={campaign.subCampaigns[indexCamp].status}
+          checked={campaign.subCampaigns[indexCamp]?.status}
           onChange={handleCheckboxChange}
         />
       </div>
+  
       <div className="advertising_list">
         <AdvertisingList
-          fullData={campaign.subCampaigns}
-          campaign={campaign}
           setCampaign={setCampaign}
-          data={campaign.subCampaigns[indexCamp].ads}
+          campaign={campaign}
+          data={campaign.subCampaigns[indexCamp]?.ads}
           indexCamp={indexCamp}
-          numQc={numQc}
-          setNumQc={setNumQc}
-          setCurrentCampaignIndex={setCurrentCampaignIndex}
-          currentCampaignIndex={currentCampaignIndex}
+          totalQuantities={totalQuantities}
+          submitted={submitted}
         />
       </div>
+   
+      </>
+  } 
     </div>
+  
   );
 };
 
