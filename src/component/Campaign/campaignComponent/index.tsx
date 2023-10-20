@@ -200,7 +200,7 @@ const CampaignComponent = ({
                 label="Tên chiến dịch con *"
                 variant="standard"
                 className={`${
-                  campaign?.subCampaigns[indexCamp]?.name == "" && "error"
+                  submitted &&  campaign?.subCampaigns[indexCamp]?.name == "" && "error"
                 }`}
                 onChange={(e) => {
                   const updatedSubCampaigns = [...campaign.subCampaigns];
