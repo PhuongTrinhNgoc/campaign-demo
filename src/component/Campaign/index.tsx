@@ -97,11 +97,7 @@ const Campaign = () => {
                   value={valueCampaign.campaignDescription}
                   variant="standard"
                   id="standard-basic"
-                  className={`${
-                    valueCampaign.campaignDescription == "" && submitted
-                      ? "error"
-                      : ""
-                  }`}
+                
                 />
                 {valueCampaign.campaignDescription == "" && submitted ? (
                   <div className="text_err">Dữ liệu không hợp lệ</div>
