@@ -1,13 +1,13 @@
-import React, { useEffect, useState } from "react";
 import AddIcon from "@mui/icons-material/Add";
-import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
-import TextField from "@mui/material/TextField";
-import FormControlLabel from "@mui/material/FormControlLabel";
-import Checkbox from "@mui/material/Checkbox";
-import Tooltip from "@mui/material/Tooltip";
-import AdvertisingList from "./advertisingList";
+import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
 import DeleteIcon from "@mui/icons-material/Delete";
+import Checkbox from "@mui/material/Checkbox";
+import FormControlLabel from "@mui/material/FormControlLabel";
+import TextField from "@mui/material/TextField";
+import Tooltip from "@mui/material/Tooltip";
+import { useEffect, useState } from "react";
+import AdvertisingList from "./advertisingList";
 
 const CampaignComponent = ({
   campaign,
@@ -18,6 +18,11 @@ const CampaignComponent = ({
   allAds,
   setSubCampaignStatus2,
   subCampaignStatus2,
+  setValue2,
+  handleClickCampaign,
+  setIndexActive,
+  indexActive,
+  valueTab,
 }: {
   campaign: any;
   setCampaign: any;
@@ -27,8 +32,12 @@ const CampaignComponent = ({
   allAds: any;
   setSubCampaignStatus2: any;
   subCampaignStatus2: any;
+  setValue2: any;
+  handleClickCampaign: any;
+  setIndexActive: any;
+  indexActive: any;
+  valueTab: any;
 }) => {
-  const [value, setValue] = useState("");
   const [campaignNum, setCampaignNum] = useState(2);
   const [totalQuantities, setTotalQuantities] = useState<number[]>([]);
   const [subCampaignStatus, setSubCampaignStatus] = useState(
@@ -48,14 +57,17 @@ const CampaignComponent = ({
   }, [campaign.subCampaigns]);
 
   useEffect(() => {
-    setValue(campaign.subCampaigns[campaign.subCampaigns.length - 1]?.name);
+    setValue2(campaign.subCampaigns[campaign.subCampaigns.length - 1]?.name);
     setIndexCamp(campaign.subCampaigns.length - 1);
+    setIndexActive(campaign.subCampaigns.length - 1);
   }, [campaign.subCampaigns.length]);
 
-  const newAllAds = allAds.filter((fil: any) => {
-    return fil > 0;
-  });
-  console.log(newAllAds);
+  useEffect(() => {
+    const firstIndex = 0;
+    setIndexActive(0);
+    setValue2(campaign.subCampaigns[firstIndex]?.name);
+    setIndexCamp(0);
+  }, [valueTab]);
 
   //handle
 
@@ -63,7 +75,7 @@ const CampaignComponent = ({
     const updatedSubCampaigns = [...campaign.subCampaigns];
     updatedSubCampaigns[indexCamp] = {
       ...updatedSubCampaigns[indexCamp],
-      status: !subCampaignStatus[indexCamp], // Thay đổi trạng thái tại chỉ số index
+      status: !subCampaignStatus[indexCamp],
     };
     setSubCampaignStatus((prevStatus: any) => {
       const newStatus = [...prevStatus];
@@ -76,6 +88,7 @@ const CampaignComponent = ({
     }));
   };
   const handleAddCampaign = () => {
+    setValue2("");
     setCampaignNum(campaignNum + 1);
     const newObject = {
       name: `Chiến dịch con ${campaignNum}`,
@@ -86,11 +99,6 @@ const CampaignComponent = ({
       ...prevState,
       subCampaigns: [...prevState.subCampaigns, newObject],
     }));
-  };
-
-  const handleClickCampaign = (campai: any, index: number) => {
-    setIndexCamp(index);
-    setValue(campai.name);
   };
 
   const handleRemoveCampaign = (indexToRemove: number) => {
@@ -119,35 +127,42 @@ const CampaignComponent = ({
                 <div className="position-re" key={index}>
                   <div
                     onClick={() => handleClickCampaign(campai, index)}
-                    className={`campaign ${value == campai.name && "active"}  ${
+                    className={`campaign ${indexActive == index && "active"}  ${
                       subCampaignStatus2[index] === "error"
                         ? "error"
-                        : "" && campaign?.subCampaigns[indexCamp]?.name !== '' && submitted
+                        : "" &&
+                          campaign?.subCampaigns[indexCamp]?.name !== "" &&
+                          submitted
                         ? "error"
                         : ""
-                    }`  }
+                    }`}
                   >
                     <div className="campaign_content">
-                      <div className="campaign_content_head">
-                        <span>
-                          <div
-                            className={` campain_name ${
-                              subCampaignStatus2[index] === "error"
-                                ? "error"
-                                : "" && campaign?.subCampaigns[indexCamp]?.name !== '' && submitted
-                                ? "error"
-                                : ""
-                            }`}
-                          >
-                            {" "}
-                            {campai.name}
-                            <span className="">
+                    <span className="icon_main">
                               {!campai.status ? (
                                 <CheckCircleOutlineIcon className="icon_done" />
                               ) : (
                                 <CheckCircleIcon className="icon_done" />
                               )}
                             </span>
+                      <div className="campaign_content_head">
+                 
+                        <span>
+                          <div
+                            className={` campain_name ${
+                              subCampaignStatus2[index] === "error"
+                                ? "error"
+                                : "" &&
+                                  campaign?.subCampaigns[indexCamp]?.name !==
+                                    "" &&
+                                  submitted
+                                ? "error"
+                                : ""
+                            }`}
+                          >
+                            {" "}
+                            {campai.name}
+                   
                           </div>
                         </span>
                       </div>
@@ -177,33 +192,37 @@ const CampaignComponent = ({
       {campaign.subCampaigns.length > 0 && (
         <>
           <div className="child_campaign">
-          <div className="fild_under">
-            <TextField
-              value={campaign && campaign?.subCampaigns[indexCamp]?.name}
-              sx={{ width: "80%" }}
-              id="standard-basic"
-              label="Tên chiến dịch con *"
-              variant="standard"
-              className={`${campaign?.subCampaigns[indexCamp]?.name == '' && 'error'}`}
-              onChange={(e) => {
-                const updatedSubCampaigns = [...campaign.subCampaigns];
-                updatedSubCampaigns[indexCamp] = {
-                  ...updatedSubCampaigns[indexCamp],
-                  name: e.target.value,
-                };
-                setCampaign((prevCampaign: any) => ({
-                  ...prevCampaign,
-                  subCampaigns: updatedSubCampaigns,
-                }));
-                setValue(updatedSubCampaigns[indexCamp].name);
-              }}
-            />
-                {campaign?.subCampaigns[indexCamp]?.name == '' && submitted ? (
-                  <div className="text_err text_err_campaign">Dữ liệu không hợp lệ</div>
-                ) : (
-                  ""
-                )}
-          </div>
+            <div className="fild_under">
+              <TextField
+                value={campaign && campaign?.subCampaigns[indexCamp]?.name}
+                sx={{ width: "80%" }}
+                id="standard-basic"
+                label="Tên chiến dịch con *"
+                variant="standard"
+                className={`${
+                  campaign?.subCampaigns[indexCamp]?.name == "" && "error"
+                }`}
+                onChange={(e) => {
+                  const updatedSubCampaigns = [...campaign.subCampaigns];
+                  updatedSubCampaigns[indexCamp] = {
+                    ...updatedSubCampaigns[indexCamp],
+                    name: e.target.value,
+                  };
+                  setCampaign((prevCampaign: any) => ({
+                    ...prevCampaign,
+                    subCampaigns: updatedSubCampaigns,
+                  }));
+                  setValue2(updatedSubCampaigns[indexCamp].name);
+                }}
+              />
+              {campaign?.subCampaigns[indexCamp]?.name == "" && submitted ? (
+                <div className="text_err text_err_campaign">
+                  Dữ liệu không hợp lệ
+                </div>
+              ) : (
+                ""
+              )}
+            </div>
 
             <FormControlLabel
               sx={{ width: "20%" }}
@@ -220,7 +239,6 @@ const CampaignComponent = ({
               campaign={campaign}
               data={campaign.subCampaigns[indexCamp]?.ads}
               indexCamp={indexCamp}
-              totalQuantities={totalQuantities}
               submitted={submitted}
               allAds={allAds}
               setSubCampaignStatus={setSubCampaignStatus}

@@ -24,10 +24,10 @@ const Campaign = () => {
   });
   const [indexCamp, setIndexCamp] = useState(0);
   const [subCampaignStatus2, setSubCampaignStatus2] = useState({});
-
+  const [value2, setValue2] = useState("");
+  const [valueTab, setValueTab] = useState("1");
+  const [indexActive, setIndexActive] = useState(0);
   //handle
-
-  console.log(valueCampaign);
 
   const handleInputChange = (e: any) => {
     const { name, value } = e.target;
@@ -39,7 +39,10 @@ const Campaign = () => {
 
   const handleChange = (event: React.SyntheticEvent, newValue: string) => {
     setValue(newValue);
+    setValueTab(newValue);
   };
+
+  console.log(value2);
 
   const extractAllAds = (campaignData: any) => {
     const allAds: any = [];
@@ -56,8 +59,11 @@ const Campaign = () => {
   const handleSubmit = () => {
     setSubmitted(true);
   };
-  console.log(subCampaignStatus2);
-  
+  const handleClickCampaign = (campai: any, index: number) => {
+    setIndexCamp(index);
+    setValue2(campai.name);
+    setIndexActive(index);
+  };
   return (
     <div className="content">
       <Box sx={{ width: "100%", typography: "body1" }}>
@@ -97,13 +103,12 @@ const Campaign = () => {
                   value={valueCampaign.campaignDescription}
                   variant="standard"
                   id="standard-basic"
-                
                 />
-                {valueCampaign.campaignDescription == "" && submitted ? (
+                {/* {valueCampaign.campaignDescription == "" && submitted ? (
                   <div className="text_err">Dữ liệu không hợp lệ</div>
                 ) : (
                   ""
-                )}
+                )} */}
               </div>
             </div>
           </TabPanel>
@@ -117,6 +122,11 @@ const Campaign = () => {
               allAds={allAds}
               setSubCampaignStatus2={setSubCampaignStatus2}
               subCampaignStatus2={subCampaignStatus2}
+              setValue2={setValue2}
+              handleClickCampaign={handleClickCampaign}
+              setIndexActive={setIndexActive}
+              indexActive={indexActive}
+              valueTab={valueTab}
             />
           </TabPanel>
         </TabContext>

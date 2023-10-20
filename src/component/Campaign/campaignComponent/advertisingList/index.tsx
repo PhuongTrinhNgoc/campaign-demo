@@ -1,25 +1,22 @@
-import React, { useEffect, useState } from "react";
-import Checkbox from "@mui/material/Checkbox";
-import Table from "@mui/material/Table";
-import TableHead from "@mui/material/TableHead";
-import TableRow from "@mui/material/TableRow";
-import TableCell from "@mui/material/TableCell";
-import TableBody from "@mui/material/TableBody";
-import Button from "@mui/material/Button";
-import TextField from "@mui/material/TextField";
-import FormControlLabel from "@mui/material/FormControlLabel";
 import DeleteIcon from "@mui/icons-material/Delete";
+import Button from "@mui/material/Button";
+import Checkbox from "@mui/material/Checkbox";
+import FormControlLabel from "@mui/material/FormControlLabel";
+import Table from "@mui/material/Table";
+import TableBody from "@mui/material/TableBody";
+import TableCell from "@mui/material/TableCell";
+import TableRow from "@mui/material/TableRow";
+import TextField from "@mui/material/TextField";
+import React, { useEffect, useState } from "react";
 
 const AdvertisingList = ({
   data,
   setCampaign,
   indexCamp,
   campaign,
-  totalQuantities,
   submitted,
   allAds,
   setSubCampaignStatus2,
-  subCampaignStatus2
 }: any) => {
   interface Ad {
     name: string;
@@ -93,14 +90,13 @@ const AdvertisingList = ({
       ),
     }));
   };
-  // console.log(totalQuantities);
 
   const handleNameChange = (
     e: React.ChangeEvent<HTMLInputElement>,
     index: number
   ) => {
     const updatedData = [...data];
-    updatedData[index] = { ...updatedData[index], name: e.target.value }; 
+    updatedData[index] = { ...updatedData[index], name: e.target.value };
 
     setCampaign((prevCampaign: any) => ({
       ...prevCampaign,
@@ -143,14 +139,13 @@ const AdvertisingList = ({
           }
         ),
       }));
-
     }
   };
   const checkSubCampaignStatus = () => {
-    const updatedSubCampaignStatus :any = {};
-    campaign.subCampaigns.forEach((subCampaign:any, subCampaignIndex:any) => {
+    const updatedSubCampaignStatus: any = {};
+    campaign.subCampaigns.forEach((subCampaign: any, subCampaignIndex: any) => {
       let hasError = false;
-      subCampaign.ads.forEach((ad:any) => {
+      subCampaign.ads.forEach((ad: any) => {
         if (ad.quantity === 0) {
           hasError = true;
           return;
@@ -160,14 +155,12 @@ const AdvertisingList = ({
     });
     setSubCampaignStatus2(updatedSubCampaignStatus);
   };
-  useEffect(()=>{
-
-    if(submitted){
-      checkSubCampaignStatus()
+  useEffect(() => {
+    if (submitted) {
+      checkSubCampaignStatus();
     }
-  },[campaign, submitted])
-  console.log(subCampaignStatus2);
-  
+  }, [campaign, submitted]);
+
   const handleRemoveAdvertising = (index: number) => {
     const updatedData = [...data];
     updatedData.splice(index, 1);
@@ -191,12 +184,12 @@ const AdvertisingList = ({
 
   function handleDeleteSelected() {
     const updatedData = [...data];
-    const newSelected = selected.slice(); 
+    const newSelected = selected.slice();
 
     for (let i = newSelected.length - 1; i >= 0; i--) {
       const selectedIndex = newSelected[i];
       updatedData.splice(selectedIndex, 1);
-      newSelected.pop(); 
+      newSelected.pop();
     }
 
     setCampaign((prevCampaign: any) => ({
@@ -215,10 +208,8 @@ const AdvertisingList = ({
       ),
     }));
 
-    setSelected([]); // Đặt lại danh sách đã chọn sau khi xóa
+    setSelected([]);
   }
-
-
 
   return (
     <Table aria-label="ad table">
@@ -264,12 +255,12 @@ const AdvertisingList = ({
             Thêm
           </Button>
         </TableCell>
-      </TableBody>
+      </TableBody> 
       <TableBody className="tab_bot">
         {/* <div className="body_list_campaign"> */}
 
         {data &&
-          data.map((row: any, index: number) => {
+         data.length > 0 ? data.map((row: any, index: number) => {
             const isItemSelected = isSelected(index);
 
             return (
@@ -327,8 +318,18 @@ const AdvertisingList = ({
                 </TableCell>
               </TableRow>
             );
-          })}
+          })
+        :    <TableRow> 
+          <TableCell  style={{ width: "200px" }}>
+            <div>
+            Bạn chưa có quảng cáo
+
+            </div>
+          </TableCell>
+           </TableRow>
+        }
       </TableBody>
+    
     </Table>
   );
 };
