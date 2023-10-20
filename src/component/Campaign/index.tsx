@@ -22,6 +22,8 @@ const Campaign = () => {
     campaignName: "",
     campaignDescription: "",
   });
+  const [indexCamp, setIndexCamp] = useState(0);
+  const [subCampaignStatus2, setSubCampaignStatus2] = useState({});
 
   //handle
 
@@ -38,9 +40,24 @@ const Campaign = () => {
   const handleChange = (event: React.SyntheticEvent, newValue: string) => {
     setValue(newValue);
   };
+
+  const extractAllAds = (campaignData: any) => {
+    const allAds: any = [];
+
+    campaignData[indexCamp]?.ads?.forEach((ad: any) => {
+      allAds.push(ad.quantity);
+    });
+
+    return allAds;
+  };
+  const allAds: any = extractAllAds(campaign.subCampaigns);
+  // console.log(allAds);
+
   const handleSubmit = () => {
     setSubmitted(true);
   };
+  console.log(subCampaignStatus2);
+  
   return (
     <div className="content">
       <Box sx={{ width: "100%", typography: "body1" }}>
@@ -53,33 +70,57 @@ const Campaign = () => {
           </Box>
           <TabPanel value="1">
             <div className="main_file_left">
-       
-            <TextField
-              name="campaignName"
-              label="Tên chiến dịch"
-              onChange={handleInputChange}
-              value={valueCampaign.campaignName}
-              variant="standard"
-              id="standard-basic"
-            />
+              <div className="fild_under">
+                <TextField
+                  name="campaignName"
+                  label="Tên chiến dịch"
+                  onChange={handleInputChange}
+                  value={valueCampaign.campaignName}
+                  variant="standard"
+                  id="standard-basic"
+                  className={`${
+                    valueCampaign.campaignName == "" && submitted ? "error" : ""
+                  }`}
+                />
+                {valueCampaign.campaignName == "" && submitted ? (
+                  <div className="text_err">Dữ liệu không hợp lệ</div>
+                ) : (
+                  ""
+                )}
+              </div>
 
-            <TextField
-              name="campaignDescription"
-              label="Mô tả chiến dịch"
-              onChange={handleInputChange}
-              value={valueCampaign.campaignDescription}
-              variant="standard"
-              id="standard-basic"
-            />
-                   
-                   </div>
+              <div className="fild_under">
+                <TextField
+                  name="campaignDescription"
+                  label="Mô tả chiến dịch"
+                  onChange={handleInputChange}
+                  value={valueCampaign.campaignDescription}
+                  variant="standard"
+                  id="standard-basic"
+                  className={`${
+                    valueCampaign.campaignDescription == "" && submitted
+                      ? "error"
+                      : ""
+                  }`}
+                />
+                {valueCampaign.campaignDescription == "" && submitted ? (
+                  <div className="text_err">Dữ liệu không hợp lệ</div>
+                ) : (
+                  ""
+                )}
+              </div>
+            </div>
           </TabPanel>
           <TabPanel value="2">
             <CampaignComponent
               campaign={campaign}
               setCampaign={setCampaign}
               submitted={submitted}
-              setSubmitted={setSubmitted}
+              setIndexCamp={setIndexCamp}
+              indexCamp={indexCamp}
+              allAds={allAds}
+              setSubCampaignStatus2={setSubCampaignStatus2}
+              subCampaignStatus2={subCampaignStatus2}
             />
           </TabPanel>
         </TabContext>

@@ -187,8 +187,9 @@
 }
 .error{
   color: red;
+
 }
-.error .css-v4u5dn-MuiInputBase-root-MuiInput-root:before{
+.error .MuiInput-underline:before{
   border-bottom: 1px solid red !important;
 }
 .submit{
@@ -199,10 +200,42 @@
 .main_file_left{
   display: flex;
   flex-direction: column;
+  gap: 20px;
 }
 .campaignName{
   margin-bottom: 20px;
 }
 .main_file_left .css-v4u5dn-MuiInputBase-root-MuiInput-root{
   margin-bottom: 20px !important;
+}
+.dele_For_Checkbox{
+    color: red
+}
+.dele_For_Checkbox:hover{
+  color: rgb(197, 11, 11);
+  cursor: pointer;
+}
+.fild_under{
+  position: relative;
+  width: 100%;
+}
+.text_err{
+  position: absolute;
+  bottom: -2px;
+  font-size: 13px;
+  color: red;
+
+}
+.fild_under .error{
+  width: 100% !important;
+
+}
+.fild_under .css-1u3bzj6-MuiFormControl-root-MuiTextField-root{
+  width: 100% !important;
+
+}
+.position-re campaign {
+
+}.text_err_campaign{
+  bottom: -20px;
 }
